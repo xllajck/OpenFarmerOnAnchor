@@ -13,7 +13,7 @@ def run(config_file: str):
         file.close()
     load_user_param(user)
     logger.init_loger(user_param.wax_account)
-    log.info("wax_account: {0}".format(user_param.wax_account))
+    log.info("WAX账号: {0}".format(user_param.wax_account))
     farmer = Farmer()
     farmer.wax_account = user_param.wax_account
     if user_param.use_proxy:
@@ -21,7 +21,7 @@ def run(config_file: str):
         log.info("use proxy: {0}".format(user_param.proxy))
     farmer.init()
     farmer.start()
-    log.info("===================================开始自动化===================================")
+    log.info("====================开始自动化====================")
     return farmer.run_forever()
 
 
