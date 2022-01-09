@@ -3,3 +3,4 @@ pyyaml
 tenacity
 psutil-wheels
 libeospy
+pyqt6

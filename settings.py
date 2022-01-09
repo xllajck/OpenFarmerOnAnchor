@@ -88,7 +88,9 @@ class user_param:
             "use_proxy": user_param.use_proxy,
             "proxy": user_param.proxy,
             "private_key": user_param.private_key,
+            "rpc_domain_list": user_param.rpc_domain_list,
             "rpc_domain": user_param.rpc_domain,
+            "assets_domain_list": user_param.assets_domain_list,
             "assets_domain": user_param.assets_domain,
             "build": user_param.build,
             "mining": user_param.mining,
@@ -138,9 +140,9 @@ def load_user_param(user: dict):
     user_param.proxy = user.get("proxy", None)
     user_param.private_key = user.get("private_key", None)
     user_param.rpc_domain_list = user.get("rpc_domain_list", ['https://api.wax.alohaeos.com'])
-    user_param.rpc_domain = user_param.rpc_domain_list[0]
+    user_param.rpc_domain = user.get("rpc_domain", 'https://api.wax.alohaeos.com')
     user_param.assets_domain_list = user.get("assets_domain_list", ['https://wax.api.atomicassets.io'])
-    user_param.assets_domain = user_param.assets_domain_list[0]
+    user_param.assets_domain = user.get("assets_domain", 'https://api.wax.alohaeos.com')
     user_param.build = user.get("build", True)
     user_param.mining = user.get("mining", True)
     user_param.chicken = user.get("chicken", True)

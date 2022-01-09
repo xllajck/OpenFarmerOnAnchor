@@ -12,7 +12,7 @@ import utils
 from settings import load_user_param, user_param
 import os
 
-version = "1.1"
+version = "1.0"
 
 
 def resource_path(relative_path):
@@ -35,15 +35,18 @@ class Worker(QThread):
 
     def run(self):
         logger.init_loger(user_param.wax_account)
-        log.info("wax_account; {0}".format(user_param.wax_account))
-        utils.clear_orphan_webdriver()
+        log.info("项目开源地址：https://github.com/lintan/OpenFarmerOnAnchor")
+        log.info("WAX账号： {0}".format(user_param.wax_account))
+        self.farmer.rpc_domain = user_param.rpc_domain
+        self.farmer.assets_domain = user_param.assets_domain
         self.farmer.wax_account = user_param.wax_account
         if user_param.use_proxy:
             self.farmer.proxy = user_param.proxy
             log.info("use proxy: {0}".format(user_param.proxy))
         self.farmer.init()
         self.farmer.start()
-        log.info("开始自动化，请勿刷新浏览器，如需手工操作建议新开一个浏览器操作")
+        log.info("=============开始自动化=============")
+
         return self.farmer.run_forever()
 
 
@@ -53,7 +56,7 @@ class MyDialog(QDialog, Ui_Dialog):
         self.user_yml = "user.yml"
         self.farmer = Farmer()
         self.setupUi(self)
-        self.setWindowTitle("农民世界助手{0}".format(version))
+        self.setWindowTitle("农民世界助手-Anchor钱包版{0}".format(version))
         self.setWindowIcon(QtGui.QIcon(resource_path("favicon.ico")))
         self.setWindowFlags(Qt.WindowType.WindowMinimizeButtonHint | Qt.WindowType.WindowCloseButtonHint)
         self.setFixedSize(self.size())
@@ -79,6 +82,12 @@ class MyDialog(QDialog, Ui_Dialog):
     def update_ui(self, ui_to_user_param: bool):
         if ui_to_user_param:
             user_param.wax_account = self.edit_account.text()
+            user_param.private_key = self.edit_private_key.text()
+            user_param.rpc_domain = self.comboBox_rpc_domain.currentText()
+            user_param.rpc_domain_list = user_param.rpc_domain_list
+            user_param.assets_domain_list = user_param.assets_domain_list
+            user_param.assets_domain = user_param.assets_domain
+
             user_param.use_proxy = self.checkbox_proxy.isChecked()
             user_param.proxy = self.edit_proxy.text()
             user_param.build = self.checkbox_build.isChecked()
@@ -130,6 +139,9 @@ class MyDialog(QDialog, Ui_Dialog):
 
         else:
             self.edit_account.setText(user_param.wax_account)
+            self.edit_private_key.setText(user_param.private_key)
+            self.comboBox_rpc_domain.setCurrentText(user_param.rpc_domain)
+
             self.checkbox_proxy.setChecked(user_param.use_proxy)
             self.edit_proxy.setText(user_param.proxy)
             self.checkbox_build.setChecked(user_param.build)
@@ -180,6 +192,7 @@ class MyDialog(QDialog, Ui_Dialog):
             self.checkbox_breeding.setChecked(user_param.breeding)
 
     def setEnabled(self, status: bool):
+
         self.checkbox_cow.setEnabled(status)
         self.checkbox_build.setEnabled(status)
         self.checkbox_plant.setEnabled(status)
@@ -189,6 +202,10 @@ class MyDialog(QDialog, Ui_Dialog):
         self.checkbox_chicken.setEnabled(status)
         self.edit_proxy.setEnabled(status)
         self.edit_account.setEnabled(status)
+
+        self.edit_private_key.setEnabled(status)
+        self.comboBox_rpc_domain.setEnabled(status)
+
         self.spinbox_energy.setEnabled(status)
         self.button_start.setEnabled(status)
 
@@ -231,12 +248,12 @@ class MyDialog(QDialog, Ui_Dialog):
         self.buy_food_num.setEnabled(status)
         # 繁殖
         self.checkbox_breeding.setEnabled(status)
-        for i in range(1, 24):
+        for i in range(1, 27):
             exec('self.label_{}.setEnabled(status)'.format(i))
 
     def start(self):
         self.setEnabled(False)
-        self.setWindowTitle("农民世界助手{0}【{1}】".format(version, self.edit_account.text()))
+        self.setWindowTitle("农民世界助手-Anchor钱包版{0}【{1}】".format(version, self.edit_account.text()))
         self.update_ui(True)
         self.worker.start()
 

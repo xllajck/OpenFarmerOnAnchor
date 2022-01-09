@@ -64,9 +64,9 @@ class Farmer:
 
     def __init__(self):
         self.wax_account: str = None
-        self.url_rpc: str = user_param.rpc_domain + '/v1/chain/'
-        self.url_table_row: str = user_param.rpc_domain + '/v1/chain/get_table_rows'
-        self.url_assets: str = user_param.assets_domain + '/atomicassets/v1/assets'
+        self.url_rpc: str = None
+        self.url_table_row: str = None
+        self.url_assets: str = None
         self.proxy: str = None
         self.http: requests.Session = None
         self.log: logging.LoggerAdapter = log
@@ -91,6 +91,9 @@ class Farmer:
 
     def init(self):
         self.log.extra["tag"] = self.wax_account
+        self.url_rpc = user_param.rpc_domain + '/v1/chain/'
+        self.url_table_row = user_param.rpc_domain + '/v1/chain/get_table_rows'
+        self.url_assets = user_param.assets_domain + '/atomicassets/v1/assets'
         self.http = requests.Session()
         self.http.trust_env = False
         self.http.request = functools.partial(self.http.request, timeout=30)
