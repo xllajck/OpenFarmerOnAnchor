@@ -21,7 +21,7 @@ def run(config_file: str):
         log.info("use proxy: {0}".format(user_param.proxy))
     farmer.init()
     farmer.start()
-    log.info("开始自动化")
+    log.info("===================================开始自动化===================================")
     return farmer.run_forever()
 
 

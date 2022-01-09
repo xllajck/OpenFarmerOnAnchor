@@ -60,18 +60,15 @@ class Farmer:
     # url_table_row = url_rpc + "get_table_rows"
     # 资产API
     # url_assets = "https://wax.api.atomicassets.io/atomicassets/v1/assets"
-    url_assets = "https://atomic.wax.eosrio.io/atomicassets/v1/assets"
+    # url_assets = "https://atomic.wax.eosrio.io/atomicassets/v1/assets"
 
     def __init__(self):
         self.wax_account: str = None
-        self.url_rpc: str = user_param.rpc_domain+'/v1/chain/'
-        self.url_table_row: str = user_param.rpc_domain+'/v1/chain/get_table_rows'
-        self.url_assets: str = user_param.assets_domain+'/atomicassets/v1/assets'
-        self.login_name: str = None
-        self.password: str = None
+        self.url_rpc: str = user_param.rpc_domain + '/v1/chain/'
+        self.url_table_row: str = user_param.rpc_domain + '/v1/chain/get_table_rows'
+        self.url_assets: str = user_param.assets_domain + '/atomicassets/v1/assets'
         self.proxy: str = None
         self.http: requests.Session = None
-        self.cookies: List[dict] = None
         self.log: logging.LoggerAdapter = log
         # 下一次可以操作东西的时间
         self.next_operate_time: datetime = datetime.max
@@ -94,8 +91,6 @@ class Farmer:
 
     def init(self):
         self.log.extra["tag"] = self.wax_account
-
-
         self.http = requests.Session()
         self.http.trust_env = False
         self.http.request = functools.partial(self.http.request, timeout=30)
@@ -109,7 +104,6 @@ class Farmer:
                                             before_sleep=self.log_retry, reraise=True)
         self.http.get = http_retry_wrapper(self.http.get)
         self.http.post = http_retry_wrapper(self.http.post)
-
 
     def start(self):
         # 从服务器获取游戏参数
@@ -533,7 +527,7 @@ class Farmer:
     def breeding_claim(self, animals: List[Animal]):
 
         for item in animals:
-            self.log.info("【繁殖】正在喂[{0}]: [{1}]".format(item.name, item.show(False,True)))
+            self.log.info("【繁殖】正在喂[{0}]: [{1}]".format(item.name, item.show(False, True)))
             feed_asset_id = self.get_animal_food(item)
             if not feed_asset_id:
                 return False
@@ -625,9 +619,6 @@ class Farmer:
             else:
                 self.log.error("transact error: {0}".format(result))
             raise TransactException(result)
-
-
-
 
     # 过滤可操作的作物
     def filter_operable(self, items: List[Farming]) -> Farming:

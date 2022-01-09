@@ -2,10 +2,20 @@
 wax_account: abcde.wam
 # 私钥
 private_key: null
-# wax节点链接
-rpc_domain: https://wax.dapplica.io
-# 原子市场节点链接
-assets_domain: https://wax.api.atomicassets.io
+# wax节点链接,默认使用第一个节点
+rpc_domain_list:
+ - https://api.wax.alohaeos.com
+ - https://wax.dapplica.io
+ - https://api.waxsweden.org
+ - https://wax.pink.gg
+ - https://wax.dapplica.io
+ - https://wax.eosphere.io
+ - https://api.wax.greeneosio.com
+ - https://wax.cryptolions.io
+# 原子市场节点链接,默认使用第一个节点
+assets_domain_list:
+  - https://wax.api.atomicassets.io
+  - https://atomic.wax.eosrio.io
 # only http proxy like 127.0.0.1:10809
 use_proxy: false
 proxy: null

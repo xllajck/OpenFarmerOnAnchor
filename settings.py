@@ -10,7 +10,7 @@ class Settings:
     # 发送http请求的间隔
     req_interval = 3
     # 发送合约请求的间隔（在http请求的间隔基础上再加几秒）
-    transact_interval = 3
+    transact_interval = 0
     # 每小时至少扫描一次，即使没有可用的作物，这样可以处理上次扫码后新种的作物
     max_scan_interval = timedelta(minutes=15)
     # 每次扫描至少间隔10秒，哪怕是出错重扫
@@ -22,9 +22,11 @@ class user_param:
     wax_account: str = None
     use_proxy: bool = True
     proxy: str = None
-    rpc_domain: str = None
     private_key: str = None
+    rpc_domain_list: list = []
+    rpc_domain: str = None
     assets_domain: str = None
+    assets_domain_list: list = []
 
     build: bool = True
     mining: bool = True
@@ -95,7 +97,6 @@ class user_param:
             "cow": user_param.cow,
             "mbs": user_param.mbs,
             "recover_energy": user_param.recover_energy,
-
             "withdraw": user_param.withdraw,
             "auto_deposit": user_param.auto_deposit,
             "sell_corn": user_param.sell_corn,
@@ -136,8 +137,10 @@ def load_user_param(user: dict):
     user_param.use_proxy = user.get("use_proxy", True)
     user_param.proxy = user.get("proxy", None)
     user_param.private_key = user.get("private_key", None)
-    user_param.rpc_domain = user.get("rpc_domain", 'https://api.wax.alohaeos.com')
-    user_param.assets_domain = user.get("assets_domain", 'https://wax.api.atomicassets.io')
+    user_param.rpc_domain_list = user.get("rpc_domain_list", ['https://api.wax.alohaeos.com'])
+    user_param.rpc_domain = user_param.rpc_domain_list[0]
+    user_param.assets_domain_list = user.get("assets_domain_list", ['https://wax.api.atomicassets.io'])
+    user_param.assets_domain = user_param.assets_domain_list[0]
     user_param.build = user.get("build", True)
     user_param.mining = user.get("mining", True)
     user_param.chicken = user.get("chicken", True)
