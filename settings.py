@@ -142,7 +142,7 @@ def load_user_param(user: dict):
     user_param.rpc_domain_list = user.get("rpc_domain_list", ['https://api.wax.alohaeos.com'])
     user_param.rpc_domain = user.get("rpc_domain", 'https://api.wax.alohaeos.com')
     user_param.assets_domain_list = user.get("assets_domain_list", ['https://wax.api.atomicassets.io'])
-    user_param.assets_domain = user.get("assets_domain", 'https://api.wax.alohaeos.com')
+    user_param.assets_domain = user.get("assets_domain", 'https://wax.api.atomicassets.io')
     user_param.build = user.get("build", True)
     user_param.mining = user.get("mining", True)
     user_param.chicken = user.get("chicken", True)

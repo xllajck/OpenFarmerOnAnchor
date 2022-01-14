@@ -86,7 +86,7 @@ class MyDialog(QDialog, Ui_Dialog):
             user_param.rpc_domain = self.comboBox_rpc_domain.currentText()
             user_param.rpc_domain_list = user_param.rpc_domain_list
             user_param.assets_domain_list = user_param.assets_domain_list
-            user_param.assets_domain = user_param.assets_domain
+            user_param.assets_domain = self.comboBox_assets_domain.currentText()
 
             user_param.use_proxy = self.checkbox_proxy.isChecked()
             user_param.proxy = self.edit_proxy.text()
@@ -141,6 +141,7 @@ class MyDialog(QDialog, Ui_Dialog):
             self.edit_account.setText(user_param.wax_account)
             self.edit_private_key.setText(user_param.private_key)
             self.comboBox_rpc_domain.setCurrentText(user_param.rpc_domain)
+            self.comboBox_assets_domain.setCurrentText(user_param.assets_domain)
 
             self.checkbox_proxy.setChecked(user_param.use_proxy)
             self.edit_proxy.setText(user_param.proxy)
@@ -205,6 +206,7 @@ class MyDialog(QDialog, Ui_Dialog):
 
         self.edit_private_key.setEnabled(status)
         self.comboBox_rpc_domain.setEnabled(status)
+        self.comboBox_assets_domain.setEnabled(status)
 
         self.spinbox_energy.setEnabled(status)
         self.button_start.setEnabled(status)
@@ -248,7 +250,7 @@ class MyDialog(QDialog, Ui_Dialog):
         self.buy_food_num.setEnabled(status)
         # 繁殖
         self.checkbox_breeding.setEnabled(status)
-        for i in range(1, 27):
+        for i in range(1, 28):
             exec('self.label_{}.setEnabled(status)'.format(i))
 
     def start(self):

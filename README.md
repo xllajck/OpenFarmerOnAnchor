@@ -6,7 +6,7 @@
 
 可视化界面图例：
 
-![image](https://static.umaske.com/20211231114315.png)
+![image](https://static.umaske.com/121212_20220114141141.png)
 
 命令行界面图例：
 
