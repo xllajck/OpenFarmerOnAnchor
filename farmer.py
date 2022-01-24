@@ -737,7 +737,7 @@ class Farmer:
         }
         self.wax_transact(transaction)
         self.log.info("购买完成")
-
+        time.sleep(2)
         return True
 
     # 种植
@@ -959,8 +959,23 @@ class Farmer:
                 self.log.warning("尚未支持的工具类型:{0}".format(item))
         return tools
 
-    # 使用工具挖矿操作
+    # 使用工具挖矿操作1
     def claim_mining(self, tools: List[Tool]):
+        enough_tools = []
+        not_enough_tools = []
+        for item in tools:
+            check_status = self.check_durability(item)
+            if check_status:
+                enough_tools.append(item)
+            else:
+                not_enough_tools.append(item)
+        # 耐久度够的先处理
+        self.do_mining(enough_tools)
+        # 耐久度不够的后处理
+        self.do_mining(not_enough_tools)
+
+    # 使用工具挖矿操作2
+    def do_mining(self, tools: List[Tool]):
         for item in tools:
             self.log.info("正在采矿: {0}".format(item.show()))
             self.consume_energy(Decimal(item.energy_consumed))
@@ -979,9 +994,9 @@ class Farmer:
                     },
                 }],
             }
-            result = self.wax_transact(transaction)
-            #ming_resource = result["processed"]["action_traces"][0]["inline_traces"][1]["act"]["data"]["rewards"]
-            #self.log.info("采矿成功: {0},{1}".format(item.show(more=False), ming_resource))
+            self.wax_transact(transaction)
+            # ming_resource = result["processed"]["action_traces"][0]["inline_traces"][1]["act"]["data"]["rewards"]
+            # self.log.info("采矿成功: {0},{1}".format(item.show(more=False), ming_resource))
             self.log.info("采矿成功: {0}".format(item.show(more=False)))
             time.sleep(cfg.req_interval)
 
@@ -1130,8 +1145,17 @@ class Farmer:
         self.log.info("正在恢复能量: 【{0}】点 ".format(count))
         need_food = count // Decimal(5)
         if need_food > self.resoure.food:
-            self.log.error(f"食物不足，仅剩【{self.resoure.food}】，兑换能量【{count}】点需要【{need_food}】个食物，请手工处理")
-            raise FarmerException("没有足够的食物，请补充食物，稍后程序自动重试")
+            if self.resoure.food <= 0:
+                # 食物不足，开启充值
+                if user_param.auto_deposit:
+                    self.log.info("食物不足，开启充值")
+                    self.scan_deposit()
+                else:
+                    self.log.info(f"食物不足，未开启充值，仅剩【{self.resoure.food}】，兑换能量【{count}】点需要【{need_food}】个食物，请手工处理")
+                raise FarmerException("没有足够的食物，请补充食物，稍后程序自动重试")
+            else:
+                count = self.resoure.food * Decimal(5)
+                self.log.info(f"食物不足，剩余【{self.resoure.food}】肉将全部补充能量，可补充【{count}】点")
 
         transaction = {
             "actions": [{
@@ -1166,14 +1190,21 @@ class Farmer:
 
     # 消耗耐久度 （操作前模拟计算）
     def consume_durability(self, tool: Tool):
-        if tool.current_durability / tool.durability < (user_param.min_durability / 100):
-            self.log.info(f"工具耐久不足{user_param.min_durability}%")
-            self.repair_tool(tool)
-        elif tool.current_durability >= tool.durability_consumed:
+        check_status = self.check_durability(tool)
+        if check_status:
             return True
         else:
             self.log.info("工具耐久不足")
             self.repair_tool(tool)
+
+    # 判断耐久度 （操作前模拟计算）
+    def check_durability(self, tool: Tool):
+        if tool.current_durability / tool.durability < (user_param.min_durability / 100):
+            return False
+        elif tool.current_durability < tool.durability_consumed:
+            return False
+        else:
+            return True
 
     def scan_mbs(self):
         self.log.info("检查会员卡")
