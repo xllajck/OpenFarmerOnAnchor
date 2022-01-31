@@ -1005,10 +1005,10 @@ class Farmer:
         self.log.info("检查矿场")
         tools = self.get_tools()
         self.log.info("采矿的工具:")
-        if user_param.mbs_mint:
+        if user_param.mbs and user_param.mbs_mint:
             self.log.info("已开启会员卡存储挖矿")
         for item in tools:
-            if user_param.mbs_mint:
+            if user_param.mbs and user_param.mbs_mint:
                 next_op_time = item.next_availability
                 if item.mining_type == 'Wood':
                     next_op_time = item.next_availability + item.charge_time * self.mbs_saved_claims.Wood
