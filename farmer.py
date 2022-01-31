@@ -17,7 +17,7 @@ from utils import plat
 from settings import user_param
 import res
 from res import Building, Resoure, Animal, Asset, Farming, Crop, NFT, Axe, Tool, Token, Chicken, FishingRod, MBS
-from res import BabyCalf, Calf, FeMaleCalf, MaleCalf, Bull, DairyCow
+from res import BabyCalf, Calf, FeMaleCalf, MaleCalf, Bull, DairyCow, MbsSavedClaims
 
 from datetime import datetime, timedelta
 from settings import cfg
@@ -85,6 +85,7 @@ class Farmer:
         # 本轮开始时的资源数量
         self.resoure: Resoure = None
         self.token: Token = None
+        self.mbs_saved_claims: MbsSavedClaims = None
 
     def close(self):
         self.log.info("稍等，程序正在退出")
@@ -1004,7 +1005,18 @@ class Farmer:
         self.log.info("检查矿场")
         tools = self.get_tools()
         self.log.info("采矿的工具:")
+        if user_param.mbs_mint:
+            self.log.info("已开启会员卡存储挖矿")
         for item in tools:
+            if user_param.mbs_mint:
+                next_op_time = item.next_availability
+                if item.mining_type == 'Wood':
+                    next_op_time = item.next_availability + item.charge_time * self.mbs_saved_claims.Wood
+                if item.mining_type == 'Food':
+                    next_op_time = item.next_availability + item.charge_time * self.mbs_saved_claims.Food
+                if item.mining_type == 'Gold':
+                    next_op_time = item.next_availability + item.charge_time * self.mbs_saved_claims.Gold
+                item.next_availability = next_op_time
             self.log.info(item.show())
         tools = self.filter_operable(tools)
         if not tools:
@@ -1232,13 +1244,25 @@ class Farmer:
         self.log.debug("get_mbs:{0}".format(resp.text))
         resp = resp.json()
         mbs = []
+        self.mbs_saved_claims = MbsSavedClaims()
         for item in resp["rows"]:
             mb = res.create_mbs(item)
             if mb:
+                self.add_saved_claims(mb)
                 mbs.append(mb)
             else:
                 self.log.warning("尚未支持的会员卡类型:{0}".format(item))
         return mbs
+
+    def add_saved_claims(self, MBS):
+        if MBS.type == 'Wood':
+            self.mbs_saved_claims.Wood += MBS.saved_claims
+        if MBS.type == 'Food':
+            self.mbs_saved_claims.Food += MBS.saved_claims
+        if MBS.type == 'Gold':
+            self.mbs_saved_claims.Gold += MBS.saved_claims
+
+        self.log.debug("mbs_saved_claims:{0}".format(self.mbs_saved_claims))
 
     def claim_mbs(self, tools: List[MBS]):
         for item in tools:
@@ -1319,11 +1343,11 @@ class Farmer:
             self.scan_resource()
             time.sleep(cfg.req_interval)
 
-            if user_param.mining:
-                self.scan_mining()
-                time.sleep(cfg.req_interval)
             if user_param.mbs:
                 self.scan_mbs()
+                time.sleep(cfg.req_interval)
+            if user_param.mining:
+                self.scan_mining()
                 time.sleep(cfg.req_interval)
             if user_param.plant:
                 self.scan_crops()

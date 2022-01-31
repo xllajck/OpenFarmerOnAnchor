@@ -34,6 +34,7 @@ class user_param:
     plant: bool = True
     cow: bool = True
     mbs: bool = True
+    mbs_mint: bool = False
     # 能量不够的时候，就去恢复那么多能量,但不超过最大能量
     recover_energy: int = 500
 
@@ -98,6 +99,7 @@ class user_param:
             "plant": user_param.plant,
             "cow": user_param.cow,
             "mbs": user_param.mbs,
+            "mbs_mint": user_param.mbs_mint,
             "recover_energy": user_param.recover_energy,
             "withdraw": user_param.withdraw,
             "auto_deposit": user_param.auto_deposit,
@@ -143,26 +145,27 @@ def load_user_param(user: dict):
     user_param.rpc_domain = user.get("rpc_domain", 'https://api.wax.alohaeos.com')
     user_param.assets_domain_list = user.get("assets_domain_list", ['https://wax.api.atomicassets.io'])
     user_param.assets_domain = user.get("assets_domain", 'https://wax.api.atomicassets.io')
-    user_param.build = user.get("build", True)
-    user_param.mining = user.get("mining", True)
-    user_param.chicken = user.get("chicken", True)
-    user_param.cow = user.get("cow", True)
-    user_param.plant = user.get("plant", True)
-    user_param.mbs = user.get("mbs", True)
+    user_param.build = user.get("build", False)
+    user_param.mining = user.get("mining", False)
+    user_param.chicken = user.get("chicken", False)
+    user_param.cow = user.get("cow", False)
+    user_param.plant = user.get("plant", False)
+    user_param.mbs = user.get("mbs", False)
+    user_param.mbs_mint = user.get("mbs_mint", False)
     user_param.sell_corn = user.get("sell_corn", False)
     user_param.sell_barley = user.get("sell_barley", False)
     user_param.sell_milk = user.get("sell_milk", False)
     user_param.sell_egg = user.get("sell_egg", False)
     user_param.auto_plant = user.get("auto_plant", False)
     user_param.recover_energy = user.get("recover_energy", 500)
-    user_param.min_energy = user.get("min_energy", 50)
+    user_param.min_energy = user.get("min_energy", 0)
     user_param.min_durability = user.get("min_durability", 0)
     user_param.withdraw = user.get("withdraw", False)
     user_param.auto_deposit = user.get("auto_deposit", False)
-    user_param.need_fww = user.get("need_fww", 200)
-    user_param.need_fwf = user.get("need_fwf", 200)
-    user_param.need_fwg = user.get("need_fwg", 200)
-    user_param.withdraw_min = user.get("withdraw_min", 200)
+    user_param.need_fww = user.get("need_fww", 0)
+    user_param.need_fwf = user.get("need_fwf", 0)
+    user_param.need_fwg = user.get("need_fwg", 0)
+    user_param.withdraw_min = user.get("withdraw_min", 0)
     user_param.remaining_corn_num = user.get("remaining_corn_num", 0)
     user_param.remaining_barley_num = user.get("remaining_barley_num", 0)
     user_param.remaining_milk_num = user.get("remaining_milk_num", 0)
