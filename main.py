@@ -20,8 +20,8 @@ def run(config_file: str):
     encrypttext = read_file('encrypttext')
     if not encrypttext:
         private_key = getpass.getpass('请输入私钥：')
-        key_pwd = getpass.getpass("请输入密码:")
-        pc = prpcrypt(key_pwd)
+        cfg.key_pwd = getpass.getpass("请输入密码:")
+        pc = prpcrypt(cfg.key_pwd)
         encrypt_key = pc.encrypt(private_key)
         if not encrypt_key:
             print('私钥格式有误，请重新输入')
