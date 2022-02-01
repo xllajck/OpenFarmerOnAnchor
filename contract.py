@@ -3,7 +3,9 @@ from requests import HTTPError
 import eospy.cleos
 import eospy.keys
 import pytz
-from settings import user_param
+from logger import log
+from encrypt import read_file, prpcrypt
+from settings import user_param, cfg
 
 
 def push_transaction(params_json):
@@ -30,8 +32,20 @@ def push_transaction(params_json):
     # use a string or EOSKey for push_transaction
     # key = "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
     # use EOSKey:
+    private_key = ''
+    encrypttext = read_file('encrypttext')
+    if not encrypttext:
+        log.info("私钥不存在！")
+        return False, '私钥不存在'
+    else:
+        pc = prpcrypt(cfg.key_pwd)
+        private_key = pc.decrypt(encrypttext)
 
-    key = eospy.keys.EOSKey(user_param.private_key)
+    if not private_key:
+        log.info("私钥不存在或密码错误！")
+        return False, '私钥不存在或密码错误'
+
+    key = eospy.keys.EOSKey(private_key)
     try:
         resp = ce.push_transaction(trx, key, broadcast=True)
         return True, resp

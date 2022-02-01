@@ -1,7 +1,5 @@
 # 账户名
 wax_account: abcde.wam
-# 私钥
-private_key: null
 # wax节点链接,默认使用第一个节点
 rpc_domain_list:
  - https://api.wax.alohaeos.com
