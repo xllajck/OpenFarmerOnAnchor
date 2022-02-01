@@ -9,7 +9,7 @@ from logger import log
 import yaml
 import sys
 import utils
-from settings import load_user_param, user_param
+from settings import load_user_param, user_param, cfg
 import os
 from encrypt import prpcrypt
 version = "1.1"
@@ -82,10 +82,8 @@ class MyDialog(QDialog, Ui_Dialog):
     def update_ui(self, ui_to_user_param: bool):
         if ui_to_user_param:
             user_param.wax_account = self.edit_account.text()
-            private_key = self.edit_private_key.text()
-            pc = prpcrypt(user_param.wax_account)
-            private_key = pc.decrypt(private_key)
-            user_param.private_key = private_key
+            cfg.key_pwd = self.edit_pwd_key.text()
+
             user_param.rpc_domain = self.comboBox_rpc_domain.currentText()
             user_param.rpc_domain_list = user_param.rpc_domain_list
             user_param.assets_domain_list = user_param.assets_domain_list
@@ -142,11 +140,7 @@ class MyDialog(QDialog, Ui_Dialog):
 
         else:
             self.edit_account.setText(user_param.wax_account)
-            # private_key = None
-            # if user_param.private_key:
-            #     pc = prpcrypt(user_param.wax_account)
-            #     private_key = pc.encrypt(user_param.private_key)
-            self.edit_private_key.setText(user_param.private_key)
+
             self.comboBox_rpc_domain.setCurrentText(user_param.rpc_domain)
             self.comboBox_assets_domain.setCurrentText(user_param.assets_domain)
 
@@ -211,7 +205,7 @@ class MyDialog(QDialog, Ui_Dialog):
         self.edit_proxy.setEnabled(status)
         self.edit_account.setEnabled(status)
 
-        self.edit_private_key.setEnabled(status)
+        self.edit_pwd_key.setEnabled(status)
         self.comboBox_rpc_domain.setEnabled(status)
         self.comboBox_assets_domain.setEnabled(status)
 

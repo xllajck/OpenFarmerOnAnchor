@@ -19,7 +19,7 @@ def run(config_file: str):
 
     encrypttext = read_file('encrypttext')
     if not encrypttext:
-        private_key = input('请输入私钥：')
+        private_key = getpass.getpass('请输入私钥：')
         key_pwd = getpass.getpass("请输入密码:")
         pc = prpcrypt(key_pwd)
         encrypt_key = pc.encrypt(private_key)
