@@ -4,3 +4,4 @@ tenacity
 psutil-wheels
 libeospy
 pyqt6
+pycryptodomex

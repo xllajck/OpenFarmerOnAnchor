@@ -1,11 +1,13 @@
 from dataclasses import dataclass
 from datetime import timedelta
+from encrypt import prpcrypt
 
 
 @dataclass
 class Settings:
     path_logs: str
     chrome_data_dir: str
+    key_pwd: str = None
     url_db: str = None
     # 发送http请求的间隔
     req_interval = 3
@@ -22,7 +24,6 @@ class user_param:
     wax_account: str = None
     use_proxy: bool = True
     proxy: str = None
-    private_key: str = None
     rpc_domain_list: list = []
     rpc_domain: str = None
     assets_domain: str = None
@@ -88,7 +89,6 @@ class user_param:
             "wax_account": user_param.wax_account,
             "use_proxy": user_param.use_proxy,
             "proxy": user_param.proxy,
-            "private_key": user_param.private_key,
             "rpc_domain_list": user_param.rpc_domain_list,
             "rpc_domain": user_param.rpc_domain,
             "assets_domain_list": user_param.assets_domain_list,
@@ -140,7 +140,6 @@ def load_user_param(user: dict):
     user_param.wax_account = user["wax_account"]
     user_param.use_proxy = user.get("use_proxy", True)
     user_param.proxy = user.get("proxy", None)
-    user_param.private_key = user.get("private_key", None)
     user_param.rpc_domain_list = user.get("rpc_domain_list", ['https://api.wax.alohaeos.com'])
     user_param.rpc_domain = user.get("rpc_domain", 'https://api.wax.alohaeos.com')
     user_param.assets_domain_list = user.get("assets_domain_list", ['https://wax.api.atomicassets.io'])

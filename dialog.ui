@@ -816,10 +816,10 @@
     </rect>
    </property>
    <property name="text">
-    <string>私钥</string>
+    <string>密码</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="edit_private_key">
+  <widget class="QLineEdit" name="edit_pwd_key">
    <property name="geometry">
     <rect>
      <x>201</x>
@@ -830,6 +830,9 @@
    </property>
    <property name="text">
     <string/>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
    </property>
   </widget>
   <widget class="QLabel" name="label_26">
