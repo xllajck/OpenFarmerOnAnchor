@@ -6,6 +6,7 @@ __pycache__
 /.idea
 /logs
 user.yml
+encrypttext
 # C extensions
 *.so
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import getpass
+import os
 
 from encrypt import prpcrypt, read_file, save_to_file
 from farmer import Farmer
@@ -16,19 +17,15 @@ def run(config_file: str):
         user: dict = yaml.load(file, Loader=yaml.FullLoader)
         file.close()
     load_user_param(user)
-
-    encrypttext = read_file('encrypttext')
-    if not encrypttext:
-        private_key = getpass.getpass('请输入私钥：')
-        cfg.key_pwd = getpass.getpass("请输入密码:")
-        pc = prpcrypt(cfg.key_pwd)
-        encrypt_key = pc.encrypt(private_key)
-        if not encrypt_key:
-            print('私钥格式有误，请重新输入')
-            exit()
-        save_to_file('encrypttext', encrypt_key)
+    exists = os.path.exists('encrypttext')
+    if not exists:
+        enter_key()
     else:
-        cfg.key_pwd = getpass.getpass("请输入密码:")
+        encrypttext = read_file('encrypttext')
+        if not encrypttext:
+            enter_key()
+        else:
+            cfg.key_pwd = getpass.getpass("请输入密码:")
 
     logger.init_loger(user_param.wax_account)
     log.info("项目开源地址：https://github.com/lintan/OpenFarmerOnAnchor")
@@ -44,10 +41,18 @@ def run(config_file: str):
     return farmer.run_forever()
 
 
+def enter_key():
+    private_key = getpass.getpass('请输入私钥：')
+    cfg.key_pwd = getpass.getpass("请输入密码:")
+    pc = prpcrypt(cfg.key_pwd)
+    encrypt_key = pc.encrypt(private_key)
+    if not encrypt_key:
+        print('私钥格式有误，请重新输入')
+        exit()
+    save_to_file('encrypttext', encrypt_key)
 
 
 def main():
-
     try:
         user_yml = "user.yml"
         if len(sys.argv) == 2:
