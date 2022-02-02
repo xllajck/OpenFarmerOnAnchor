@@ -42,7 +42,7 @@ def run(config_file: str):
 
 
 def enter_key():
-    private_key = getpass.getpass('请输入私钥：')
+    private_key = getpass.getpass("请输入私钥:")
     cfg.key_pwd = getpass.getpass("请输入密码:")
     pc = prpcrypt(cfg.key_pwd)
     encrypt_key = pc.encrypt(private_key)
