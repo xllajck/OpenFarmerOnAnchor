@@ -13,20 +13,22 @@ def push_transaction(params_json):
     # We suggest using a different testnet such as kylin or jungle
     #
     ce = eospy.cleos.Cleos(url=user_param.rpc_domain)
+    payloads = []
+    for item in params_json['actions']:
+        arguments = item['data']
+        payload = {
+            "account": item['account'],
+            "name": item['name'],
+            "authorization": item['authorization'],
+        }
 
-    arguments = params_json['actions'][0]['data']
-    payload = {
-        "account": params_json['actions'][0]['account'],
-        "name": params_json['actions'][0]['name'],
-        "authorization": params_json['actions'][0]['authorization'],
-    }
-
-    # Converting payload to binary
-    data = ce.abi_json_to_bin(payload['account'], payload['name'], arguments)
-    # Inserting payload binary form as "data" field in original payload
-    payload['data'] = data['binargs']
+        # Converting payload to binary
+        data = ce.abi_json_to_bin(payload['account'], payload['name'], arguments)
+        # Inserting payload binary form as "data" field in original payload
+        payload['data'] = data['binargs']
+        payloads.append(payload)
     # final transaction formed
-    trx = {"actions": [payload]}
+    trx = {"actions": payloads}
     trx['expiration'] = str(
         (dt.datetime.utcnow() + dt.timedelta(seconds=60)).replace(tzinfo=pytz.UTC))
     # use a string or EOSKey for push_transaction
