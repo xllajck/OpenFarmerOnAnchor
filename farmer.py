@@ -166,6 +166,7 @@ class Farmer:
         resp = resp.json()
         res.init_tool_config(resp["rows"])
         time.sleep(cfg.req_interval)
+        self.log.info("工具配置加载完成")
 
         # 农作物
         post_data["table"] = "cropconf"
@@ -173,12 +174,15 @@ class Farmer:
         self.log.debug("get crop config:{0}".format(resp.text))
         resp = resp.json()
         res.init_crop_config(resp["rows"])
+        self.log.info("作物配置加载完成")
+
         # 动物
         post_data["table"] = "anmconf"
         resp = self.http_post(post_data)
         self.log.debug("get animal conf:{0}".format(resp.text))
         resp = resp.json()
         res.init_animal_config(resp["rows"])
+        self.log.info("动物配置加载完成")
 
         # 会员卡
         post_data["table"] = "mbsconf"
@@ -186,6 +190,7 @@ class Farmer:
         self.log.debug("get mbs config:{0}".format(resp.text))
         resp = resp.json()
         res.init_mbs_config(resp["rows"])
+        self.log.info("会员卡配置加载完成")
 
     # 从服务器获取配置
     def get_farming_config(self):
@@ -215,7 +220,7 @@ class Farmer:
         post_data["index_position"] = 1
 
         resp = self.http_post(post_data)
-        self.log.info("get_table_rows:{0}".format(resp.text))
+        self.log.debug("get_table_rows:{0}".format(resp.text))
         resp = resp.json()
         if len(resp["rows"]) == 0:
             self.log.info("获取不到账号数据，请检查账号名是否有误")
