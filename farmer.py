@@ -123,10 +123,9 @@ class Farmer:
             self.log.info("正在重试: [{0}]".format(state.attempt_number))
 
     def http_post(self, post_data):
-        rpc_domain = random.choice(user_param.rpc_domain_list)
-        url_table_row = rpc_domain + '/v1/chain/get_table_rows'
+        # rpc_domain = random.choice(user_param.rpc_domain_list)
+        url_table_row = user_param.rpc_domain + '/v1/chain/get_table_rows'
         resp = self.http.post(url_table_row, json=post_data)
-
         return resp
 
     def table_row_template(self) -> dict:
