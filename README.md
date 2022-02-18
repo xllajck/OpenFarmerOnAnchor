@@ -50,6 +50,10 @@
 12. 支持食物、金子不足自动充值
 13. 支持5%费率的时候自动提现
 
+#### 脚本使用说明:
+[使用图文教程](https://lintan363316191.gitbook.io/openfarmer-jiao-ben-shi-yong-shuo-ming/gong-neng-shuo-ming)
+
+
 ### 用法一
 
 嫌麻烦的同学可以直接在github页面右侧的【Releases】处下载最新的打包版本，该版本只支持windows 64位系统，建议在win10系统上运行，把压缩包里的目录解压出来，双击运行【gui.exe】即可，命令行版本可运行【main.exe】，使用命令行版本前需手工修改配置文件【user.yml】
@@ -87,7 +91,8 @@
 #### 二、界面运行
 
 1. 双击main.py设置私钥和密码
-2. 双击gui.pyw打开界面设置参数，注意每次密码必填
+2. [使用图文教程](https://lintan363316191.gitbook.io/openfarmer-jiao-ben-shi-yong-shuo-ming/anchor-qian-bao-ban-ben/anchor-qian-bao-da-bao-ban-main.exe-an-zhuang-jiao-cheng)
+3. 双击gui.pyw打开界面设置参数，注意每次密码必填
 
 #### 脚本多开和关闭程序
 
